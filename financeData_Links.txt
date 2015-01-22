@@ -1,0 +1,3 @@
+https://www.google.com/finance?q=anz
+https://www.google.com/finance?q=qan
+https://www.google.com/finance?q=wbc

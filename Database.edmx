@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="FinanceCrawlerModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="FinanceCrawlerModelStoreContainer">
+          <EntitySet Name="GoogleFinance_Data" EntityType="FinanceCrawlerModel.Store.GoogleFinance_Data" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GoogleFinance_News" EntityType="FinanceCrawlerModel.Store.GoogleFinance_News" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="GoogleFinance_Data">
+          <Key>
+            <PropertyRef Name="Identity" />
+          </Key>
+          <Property Name="Identity" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Price" Type="numeric" Nullable="false" Scale="2" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Range_From" Type="numeric" Scale="2" />
+          <Property Name="Range_To" Type="numeric" Scale="2" />
+          <Property Name="52 Weeks_From" Type="numeric" Scale="2" />
+          <Property Name="52 Weeks_To" Type="numeric" Scale="2" />
+          <Property Name="Open" Type="numeric" Scale="2" />
+          <Property Name="Vol(M)" Type="numeric" Scale="4" />
+          <Property Name="Avg(M)" Type="numeric" Scale="4" />
+          <Property Name="Mkt Cap(B)" Type="numeric" Scale="4" />
+          <Property Name="P/E" Type="numeric" Scale="2" />
+          <Property Name="Div" Type="numeric" Scale="2" />
+          <Property Name="Yield" Type="numeric" Scale="2" />
+          <Property Name="EPS" Type="numeric" Scale="2" />
+          <Property Name="Shares(B)" Type="numeric" Scale="4" />
+          <Property Name="Beta" Type="nvarchar(max)" />
+          <Property Name="S&amp;P/ASX 200" Type="bigint" />
+          <Property Name="Group" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="GoogleFinance_News">
+          <Key>
+            <PropertyRef Name="Identity" />
+          </Key>
+          <Property Name="Identity" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Link" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Website" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Author" Type="nvarchar(max)" />
+          <Property Name="Story" Type="nvarchar(max)" />
+          <Property Name="NegWords" Type="bigint" />
+          <Property Name="PosWords" Type="bigint" />
+          <Property Name="Length_of_Post" Type="bigint" />
+          <Property Name="Group" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FinanceCrawlerModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="FinanceCrawlerEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="GoogleFinance_Data" EntityType="FinanceCrawlerModel.GoogleFinance_Data" />
+          <EntitySet Name="GoogleFinance_News" EntityType="FinanceCrawlerModel.GoogleFinance_News" />
+        </EntityContainer>
+        <EntityType Name="GoogleFinance_Data">
+          <Key>
+            <PropertyRef Name="Identity" />
+          </Key>
+          <Property Type="Int64" Name="Identity" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="Price" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="3" />
+          <Property Type="Decimal" Name="Range_From" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Range_To" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="C52_Weeks_From" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="C52_Weeks_To" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Open" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Vol_M_" Precision="18" Scale="4" />
+          <Property Type="Decimal" Name="Avg_M_" Precision="18" Scale="4" />
+          <Property Type="Decimal" Name="Mkt_Cap_B_" Precision="18" Scale="4" />
+          <Property Type="Decimal" Name="P_E" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Div" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Yield" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="EPS" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Shares_B_" Precision="18" Scale="4" />
+          <Property Type="String" Name="Beta" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Int64" Name="S_P_ASX_200" />
+          <Property Type="String" Name="Group" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="GoogleFinance_News">
+          <Key>
+            <PropertyRef Name="Identity" />
+          </Key>
+          <Property Type="Int64" Name="Identity" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Title" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Link" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Website" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Author" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Story" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Int64" Name="NegWords" />
+          <Property Type="Int64" Name="PosWords" />
+          <Property Type="Int64" Name="Length_of_Post" />
+          <Property Type="String" Name="Group" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FinanceCrawlerModelStoreContainer" CdmEntityContainer="FinanceCrawlerEntities">
+          <EntitySetMapping Name="GoogleFinance_Data">
+            <EntityTypeMapping TypeName="FinanceCrawlerModel.GoogleFinance_Data">
+              <MappingFragment StoreEntitySet="GoogleFinance_Data">
+                <ScalarProperty Name="Group" ColumnName="Group" />
+                <ScalarProperty Name="S_P_ASX_200" ColumnName="S&amp;P/ASX 200" />
+                <ScalarProperty Name="Beta" ColumnName="Beta" />
+                <ScalarProperty Name="Shares_B_" ColumnName="Shares(B)" />
+                <ScalarProperty Name="EPS" ColumnName="EPS" />
+                <ScalarProperty Name="Yield" ColumnName="Yield" />
+                <ScalarProperty Name="Div" ColumnName="Div" />
+                <ScalarProperty Name="P_E" ColumnName="P/E" />
+                <ScalarProperty Name="Mkt_Cap_B_" ColumnName="Mkt Cap(B)" />
+                <ScalarProperty Name="Avg_M_" ColumnName="Avg(M)" />
+                <ScalarProperty Name="Vol_M_" ColumnName="Vol(M)" />
+                <ScalarProperty Name="Open" ColumnName="Open" />
+                <ScalarProperty Name="C52_Weeks_To" ColumnName="52 Weeks_To" />
+                <ScalarProperty Name="C52_Weeks_From" ColumnName="52 Weeks_From" />
+                <ScalarProperty Name="Range_To" ColumnName="Range_To" />
+                <ScalarProperty Name="Range_From" ColumnName="Range_From" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Identity" ColumnName="Identity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GoogleFinance_News">
+            <EntityTypeMapping TypeName="FinanceCrawlerModel.GoogleFinance_News">
+              <MappingFragment StoreEntitySet="GoogleFinance_News">
+                <ScalarProperty Name="Group" ColumnName="Group" />
+                <ScalarProperty Name="Length_of_Post" ColumnName="Length_of_Post" />
+                <ScalarProperty Name="PosWords" ColumnName="PosWords" />
+                <ScalarProperty Name="NegWords" ColumnName="NegWords" />
+                <ScalarProperty Name="Story" ColumnName="Story" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Identity" ColumnName="Identity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
