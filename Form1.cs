@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -4158,10 +4158,12 @@ namespace WebCrawler
 
                             /* Story */
                             startIndex = sourceCode.IndexOf("id=\"content\"");
+                            if (startIndex == -1) startIndex = sourceCode.IndexOf("class=\"article-content\"");
                             sourceCode = sourceCode.Substring(startIndex, sourceCode.Length - startIndex);
                             startIndex = sourceCode.IndexOf(">") + 1;
                             sourceCode = sourceCode.Substring(startIndex, sourceCode.Length - startIndex);
                             endIndex = sourceCode.IndexOf("class=\"tool\"");
+                            if (endIndex == -1) endIndex = sourceCode.IndexOf("<!-- /.node -->"); 
                             string story = sourceCode.Substring(0, endIndex).Trim();
                             while (story.Contains("<script"))
                             {
@@ -4199,11 +4201,29 @@ namespace WebCrawler
                                 string secondPart = story.Substring(startIndex, story.Length - startIndex);
                                 story = firstPart + "\n" + secondPart;
                             }
+                            while (story.Contains("<a"))
+                            {
+                                endIndex = story.IndexOf("<a");
+                                string firstPart = story.Substring(0, endIndex);
+                                story = story.Substring(endIndex + 2, story.Length - (endIndex + 2));
+                                startIndex = story.IndexOf(">") + 1;
+                                string secondPart = story.Substring(startIndex, story.Length - startIndex);
+                                story = firstPart + "\n" + secondPart;
+                            }
                             while (story.Contains("<div"))
                             {
                                 endIndex = story.IndexOf("<div");
                                 string firstPart = story.Substring(0, endIndex);
                                 story = story.Substring(endIndex + 4, story.Length - (endIndex + 4));
+                                startIndex = story.IndexOf(">") + 1;
+                                string secondPart = story.Substring(startIndex, story.Length - startIndex);
+                                story = firstPart + "\n" + secondPart;
+                            }
+                            while (story.Contains("<blockquote"))
+                            {
+                                endIndex = story.IndexOf("<blockquote");
+                                string firstPart = story.Substring(0, endIndex);
+                                story = story.Substring(endIndex + 11, story.Length - (endIndex + 11));
                                 startIndex = story.IndexOf(">") + 1;
                                 string secondPart = story.Substring(startIndex, story.Length - startIndex);
                                 story = firstPart + "\n" + secondPart;
@@ -4240,6 +4260,10 @@ namespace WebCrawler
                             story = story.Replace("</P>", " ");
                             story = story.Replace("</ins>", " ");
                             story = story.Replace("</div>", " ");
+                            story = story.Replace("<strong>", ""); 
+                            story = story.Replace("</strong>", "");
+                            story = story.Replace("</blockquote>", "");
+                            story = story.Replace("</a>", "");
                             story = story.Replace("&nbsp;", " ");
                             story = story.Replace("&#39;", "'");
                             story = story.Replace("&rsquo;", "'");
@@ -11128,92 +11152,100 @@ namespace WebCrawler
                         {
                             string sourceCode = WorkerClasses.getSourceCode(u.Link);
 
-                            /* Find TITLE */
-                            int startIndex = sourceCode.IndexOf("<title>");
-                            sourceCode = sourceCode.Substring(startIndex, sourceCode.Length - startIndex);
-                            startIndex = sourceCode.IndexOf(">") + 1;
-                            sourceCode = sourceCode.Substring(startIndex, sourceCode.Length - startIndex);
-                            int endIndex = sourceCode.IndexOf("|");
-                            if (endIndex > 50 || endIndex == -1) endIndex = sourceCode.IndexOf("</");
-                            string title = sourceCode.Substring(0, endIndex).Trim();
-                            title = title.Replace("&quot;", "\"");
+                            if (sourceCode != "invalid")
+                            {
+                                /* Find TITLE */
+                                int startIndex = sourceCode.IndexOf("<title>");
+                                sourceCode = sourceCode.Substring(startIndex, sourceCode.Length - startIndex);
+                                startIndex = sourceCode.IndexOf(">") + 1;
+                                sourceCode = sourceCode.Substring(startIndex, sourceCode.Length - startIndex);
+                                int endIndex = sourceCode.IndexOf("|");
+                                if (endIndex > 50 || endIndex == -1) endIndex = sourceCode.IndexOf("</");
+                                string title = sourceCode.Substring(0, endIndex).Trim();
+                                title = title.Replace("&quot;", "\"");
 
-                            /* Author */
-                            startIndex = sourceCode.IndexOf("rel=\"author\"");
-                            sourceCode = sourceCode.Substring(startIndex, sourceCode.Length - startIndex);
-                            startIndex = sourceCode.IndexOf(">") + 1;
-                            sourceCode = sourceCode.Substring(startIndex, sourceCode.Length - startIndex);
-                            endIndex = sourceCode.IndexOf("</");
-                            string author = sourceCode.Substring(0, endIndex).Trim();
+                                /* Author */
+                                startIndex = sourceCode.IndexOf("rel=\"author\"");
+                                sourceCode = sourceCode.Substring(startIndex, sourceCode.Length - startIndex);
+                                startIndex = sourceCode.IndexOf(">") + 1;
+                                sourceCode = sourceCode.Substring(startIndex, sourceCode.Length - startIndex);
+                                endIndex = sourceCode.IndexOf("</");
+                                string author = sourceCode.Substring(0, endIndex).Trim();
 
-                            /* Story */
-                            startIndex = sourceCode.IndexOf("class=\"entry\"");
-                            sourceCode = sourceCode.Substring(startIndex, sourceCode.Length - startIndex);
-                            startIndex = sourceCode.IndexOf(">") + 1;
-                            sourceCode = sourceCode.Substring(startIndex, sourceCode.Length - startIndex);
-                            endIndex = sourceCode.IndexOf("<p style=\"clear:both\"");
-                            string story = sourceCode.Substring(0, endIndex).Trim();
-                            while (story.Contains("<script"))
-                            {
-                                endIndex = story.IndexOf("<script");
-                                string firstPart = story.Substring(0, endIndex);
-                                story = story.Substring(endIndex + 7, story.Length - (endIndex + 7));
-                                startIndex = story.IndexOf("</script>") + 9;
-                                string secondPart = story.Substring(startIndex, story.Length - startIndex);
-                                story = firstPart + "\n" + secondPart;
-                            }
-                            while (story.Contains("<img"))
-                            {
-                                endIndex = story.IndexOf("<img");
-                                string firstPart = story.Substring(0, endIndex);
-                                story = story.Substring(endIndex + 4, story.Length - (endIndex + 4));
-                                startIndex = story.IndexOf(">") + 1;
-                                string secondPart = story.Substring(startIndex, story.Length - startIndex);
-                                story = firstPart + "\n" + secondPart;
-                            }
-                            while (story.Contains("<div"))
-                            {
-                                endIndex = story.IndexOf("<div");
-                                string firstPart = story.Substring(0, endIndex);
-                                story = story.Substring(endIndex + 4, story.Length - (endIndex + 4));
-                                startIndex = story.IndexOf("</div>") + 6;
-                                string secondPart = story.Substring(startIndex, story.Length - startIndex);
-                                story = firstPart + "\n" + secondPart;
-                            }
-                            while (story.Contains("<!--"))
-                            {
-                                endIndex = story.IndexOf("<!--");
-                                string firstPart = story.Substring(0, endIndex);
-                                story = story.Substring(endIndex + 3, story.Length - (endIndex + 3));
-                                startIndex = story.IndexOf("-->") + 3;
-                                string secondPart = "";
-                                if (story.IndexOf("-->") != -1) secondPart = story.Substring(startIndex, story.Length - startIndex);
-                                story = firstPart + "\n" + secondPart;
-                            }
-                            story = story.Replace("</span>", " ");
-                            story = story.Replace("</script>", " ");
-                            story = story.Replace("</ul>", " ");
-                            story = story.Replace("</li>", " ");
-                            story = story.Replace("</tr>", " ");
-                            story = story.Replace("</td>", " ");
-                            story = story.Replace("<p>", "");
-                            story = story.Replace("</p>", " ");
-                            story = story.Replace("<P>", "");
-                            story = story.Replace("</P>", " ");
-                            story = story.Replace("</div>", " ");
-                            story = story.Replace("&nbsp;", " ");
-                            story = story.Replace("&#39;", "'");
-                            story = story.Replace("&rsquo;", "'");
-                            story = story.Replace("&ldquo;", "\"");
-                            story = story.Replace("&rdquo;", "\"");
-                            story = story.Replace("&quot;", "\"");
-                            story = story.Replace("&amp;", "&");
-                            story = story.Replace("\n", "");
-                            story = story.Replace("\t", "");
+                                /* Story */
+                                startIndex = sourceCode.IndexOf("class=\"entry\"");
+                                sourceCode = sourceCode.Substring(startIndex, sourceCode.Length - startIndex);
+                                startIndex = sourceCode.IndexOf(">") + 1;
+                                sourceCode = sourceCode.Substring(startIndex, sourceCode.Length - startIndex);
+                                endIndex = sourceCode.IndexOf("<p style=\"clear:both\"");
+                                string story = sourceCode.Substring(0, endIndex).Trim();
+                                while (story.Contains("<script"))
+                                {
+                                    endIndex = story.IndexOf("<script");
+                                    string firstPart = story.Substring(0, endIndex);
+                                    story = story.Substring(endIndex + 7, story.Length - (endIndex + 7));
+                                    startIndex = story.IndexOf("</script>") + 9;
+                                    string secondPart = story.Substring(startIndex, story.Length - startIndex);
+                                    story = firstPart + "\n" + secondPart;
+                                }
+                                while (story.Contains("<img"))
+                                {
+                                    endIndex = story.IndexOf("<img");
+                                    string firstPart = story.Substring(0, endIndex);
+                                    story = story.Substring(endIndex + 4, story.Length - (endIndex + 4));
+                                    startIndex = story.IndexOf(">") + 1;
+                                    string secondPart = story.Substring(startIndex, story.Length - startIndex);
+                                    story = firstPart + "\n" + secondPart;
+                                }
+                                while (story.Contains("<div"))
+                                {
+                                    endIndex = story.IndexOf("<div");
+                                    string firstPart = story.Substring(0, endIndex);
+                                    story = story.Substring(endIndex + 4, story.Length - (endIndex + 4));
+                                    startIndex = story.IndexOf("</div>") + 6;
+                                    string secondPart = story.Substring(startIndex, story.Length - startIndex);
+                                    story = firstPart + "\n" + secondPart;
+                                }
+                                while (story.Contains("<!--"))
+                                {
+                                    endIndex = story.IndexOf("<!--");
+                                    string firstPart = story.Substring(0, endIndex);
+                                    story = story.Substring(endIndex + 3, story.Length - (endIndex + 3));
+                                    startIndex = story.IndexOf("-->") + 3;
+                                    string secondPart = "";
+                                    if (story.IndexOf("-->") != -1) secondPart = story.Substring(startIndex, story.Length - startIndex);
+                                    story = firstPart + "\n" + secondPart;
+                                }
+                                story = story.Replace("</span>", " ");
+                                story = story.Replace("</script>", " ");
+                                story = story.Replace("</ul>", " ");
+                                story = story.Replace("</li>", " ");
+                                story = story.Replace("</tr>", " ");
+                                story = story.Replace("</td>", " ");
+                                story = story.Replace("<p>", "");
+                                story = story.Replace("</p>", " ");
+                                story = story.Replace("<P>", "");
+                                story = story.Replace("</P>", " ");
+                                story = story.Replace("</div>", " ");
+                                story = story.Replace("&nbsp;", " ");
+                                story = story.Replace("&#39;", "'");
+                                story = story.Replace("&rsquo;", "'");
+                                story = story.Replace("&ldquo;", "\"");
+                                story = story.Replace("&rdquo;", "\"");
+                                story = story.Replace("&quot;", "\"");
+                                story = story.Replace("&amp;", "&");
+                                story = story.Replace("\n", "");
+                                story = story.Replace("\t", "");
 
-                            if (u.Title != title) u.Title = title;
-                            u.Author = author;
-                            u.Story = story.Trim();
+                                if (u.Title != title) u.Title = title;
+                                u.Author = author;
+                                u.Story = story.Trim();
+                            }
+                            else
+                            {
+                                u.Author = "Undefined";
+                                u.Story = "Invalid";
+                            }
 
                             db.SaveChanges();
                             saved++;
